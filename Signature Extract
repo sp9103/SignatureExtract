@@ -1,0 +1,195 @@
+{
+  "nbformat": 4,
+  "nbformat_minor": 0,
+  "metadata": {
+    "colab": {
+      "name": "Untitled6.ipynb",
+      "provenance": [],
+      "include_colab_link": true
+    },
+    "kernelspec": {
+      "name": "python3",
+      "display_name": "Python 3"
+    }
+  },
+  "cells": [
+    {
+      "cell_type": "markdown",
+      "metadata": {
+        "id": "view-in-github",
+        "colab_type": "text"
+      },
+      "source": [
+        "<a href=\"https://colab.research.google.com/github/sp9103/SignatureExtract/blob/master/Signature%20Extract\" target=\"_parent\"><img src=\"https://colab.research.google.com/assets/colab-badge.svg\" alt=\"Open In Colab\"/></a>"
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "8ek9WrpjgbrO",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 53
+        },
+        "outputId": "3135ec9f-1fb0-4f03-b9b2-810982ec2e32"
+      },
+      "source": [
+        "!pip install opencv-python"
+      ],
+      "execution_count": 5,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Requirement already satisfied: opencv-python in /usr/local/lib/python3.6/dist-packages (4.1.2.30)\n",
+            "Requirement already satisfied: numpy>=1.11.3 in /usr/local/lib/python3.6/dist-packages (from opencv-python) (1.17.4)\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "fc2rulYneR3F",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "from google.colab import drive\n",
+        "import os\n",
+        "import cv2\n",
+        "import matplotlib.pyplot as plt\n",
+        "import numpy as np"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "jeEaE9r3ed6b",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 35
+        },
+        "outputId": "2f97d017-add5-410b-d19c-a8872ff4d005"
+      },
+      "source": [
+        "path = '/content/gdrive'\n",
+        "drive.mount(path)\n",
+        "path += '/My Drive/사인'\n",
+        "filepath = path + '/sign.jpg'"
+      ],
+      "execution_count": 62,
+      "outputs": [
+        {
+          "output_type": "stream",
+          "text": [
+            "Drive already mounted at /content/gdrive; to attempt to forcibly remount, call drive.mount(\"/content/gdrive\", force_remount=True).\n"
+          ],
+          "name": "stdout"
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "harKeZJ9gG8k",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "img = cv2.imread(filepath, cv2.IMREAD_GRAYSCALE)\n",
+        "plt.imshow(img)"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "UCKLWDQXgmFq",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "threshold = 190\n",
+        "\n",
+        "img2 = img.copy()\n",
+        "img2[img2 > threshold] = 255\n",
+        "img2[img2 <= threshold] = 0\n",
+        "plt.imshow(img2)"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "cWESXxLGhpyH",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        "# jpg to png\n",
+        "img2_3d = img2[:,:, np.newaxis]\n",
+        "img2_alpha = img2[:,:, np.newaxis]\n",
+        "\n",
+        "img2_alpha = 255 - img2_alpha\n",
+        "\n",
+        "print(img2_3d.shape)\n",
+        "img_rgb = np.concatenate((img2_3d, img2_3d, img2_3d, img2_alpha), axis=2)\n",
+        "plt.imshow(img_rgb)"
+      ],
+      "execution_count": 0,
+      "outputs": []
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "RrLw4psJjeC6",
+        "colab_type": "code",
+        "colab": {
+          "base_uri": "https://localhost:8080/",
+          "height": 35
+        },
+        "outputId": "8fc8fdbd-0d88-4c65-b149-c183b2352a07"
+      },
+      "source": [
+        "output_filepath = path + '/sign_out.png'\n",
+        "cv2.imwrite(output_filepath, img_rgb)"
+      ],
+      "execution_count": 78,
+      "outputs": [
+        {
+          "output_type": "execute_result",
+          "data": {
+            "text/plain": [
+              "True"
+            ]
+          },
+          "metadata": {
+            "tags": []
+          },
+          "execution_count": 78
+        }
+      ]
+    },
+    {
+      "cell_type": "code",
+      "metadata": {
+        "id": "L2oK7VwJxP51",
+        "colab_type": "code",
+        "colab": {}
+      },
+      "source": [
+        ""
+      ],
+      "execution_count": 0,
+      "outputs": []
+    }
+  ]
+}
